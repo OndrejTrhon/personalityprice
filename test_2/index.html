@@ -74,14 +74,16 @@ var suma = 0;
 
   };
   
-  function calculate (response, field) {
-			if (response.field !== "undefined") {
-		suma = suma + 0.3
+  function calculate (response, field, modify) {
+			if (response[field] !== "undefined") {
+		suma = suma + modify;
 		document.getElementById("suma").innerHTML = suma;
-		document.getElementById("field").innerHTML = response.field;
+		document.getElementById(field).innerHTML = response[field];
+		console.log(field)
+		console.log(response)
 		}
 		else {
-		document.getElementById("idcheck").innerHTML = "nene"
+		document.getElementById("idcheck").innerHTML = "nene";
 		}
 		}
 
@@ -106,7 +108,7 @@ var suma = 0;
 	
 	FB.api('/me', function (response) {
 		var field = id;
-		calculate(response, field);
+		calculate(response, id, 0.3);
 
 	});
 	
@@ -126,7 +128,7 @@ var suma = 0;
 	
 	if (response !== "undefined")
 	{
-	suma = suma + 0.3
+	suma = suma + 0.3	
 	document.getElementById("suma").innerHTML = suma;
 	document.getElementById("gender").innerHTML = response.gender;
 	}

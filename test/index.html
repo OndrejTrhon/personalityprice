@@ -6,6 +6,16 @@
 </head>
 <body>
 <script>
+
+window.onload = function() {
+    var odhad = prompt('Odhadni cenu svých dat (v USD):', '');
+    if ( odhad ) {
+        document.getElementById('odhad').innerHTML = odhad;
+    }
+
+}
+
+var suma = 0;
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -93,8 +103,8 @@
     });
 	
 	FB.api('/me', function (response) {
-		if (response.name !== "undefined") {
-		suma = suma + 0.3
+		if (response.id !== "undefined") {
+		suma = suma + 0.0005
 		document.getElementById("suma").innerHTML = suma;
 		document.getElementById("id").innerHTML = response.id;
 		}
@@ -106,7 +116,7 @@
 	
 	FB.api('/me', function (response) {
 		if (response.name !== "undefined") {
-		suma = suma + 0.3
+		suma = suma + 0.0005
 		document.getElementById("suma").innerHTML = suma;
 		document.getElementById("name").innerHTML = response.name;
 		}
@@ -117,23 +127,77 @@
 	});
 	
 	FB.api('/me', {fields: 'gender'}, function (response) {
-	
-	if (response !== "undefined")
-	{
-	suma = suma + 0.3
-	document.getElementById("suma").innerHTML = suma;
-	document.getElementById("gender").innerHTML = response.gender;
-	}
-	else
-	{
-	document.getElementById("idcheck").innerHTML = "nene"
-	}
-	
-	
+		if (response.gender !== "undefined") {
+		suma = suma + 0.0005
+		document.getElementById("suma").innerHTML = suma;
+		document.getElementById("gender").innerHTML = response.gender;
+		}
+		else {
+		document.getElementById("idcheck").innerHTML = "nene"
+		}
+
 	});
 	
+	FB.api('/me', {fields: 'email'}, function (response) {
+		if (response.email !== "undefined") {
+		suma = suma + 0,0039
+		document.getElementById("suma").innerHTML = suma;
+		document.getElementById("e-mail").innerHTML = response.email;
+		}
+		else {
+		document.getElementById("idcheck").innerHTML = "nene"
+		}
+
+	});
 	
+	FB.api('/me', {fields: 'age_range'}, function (response) {
+		if (response.age_range !== "undefined") {
+		suma = suma + 0.0005
+		document.getElementById("suma").innerHTML = suma;
+		document.getElementById("age_range").innerHTML = response.age_range.min;
+		}
+		else {
+		document.getElementById("idcheck").innerHTML = "nene"
+		}
+
+	});
 	
+	FB.api('/me', {fields: 'timezone'}, function (response) {
+		if (response.timezone !== "undefined") {
+		suma = suma + 0.00025
+		document.getElementById("suma").innerHTML = suma;
+		document.getElementById("timezone").innerHTML = response.timezone;
+		}
+		else {
+		document.getElementById("idcheck").innerHTML = "nene"
+		}
+
+	});
+
+	FB.api('/me', {fields: 'locale'}, function (response) {
+		if (response.locale !== "undefined") {
+		suma = suma + 0.00025
+		document.getElementById("suma").innerHTML = suma;
+		document.getElementById("locale").innerHTML = response.locale;
+		}
+		else {
+		document.getElementById("idcheck").innerHTML = "nene"
+		}
+
+	});
+	
+	FB.api('/me/friends', function (response) {
+		if (response.user_friends !== "undefined") {
+		suma = suma + (response.summary.total_count * 0.00001);
+		console.log(response);
+		document.getElementById("suma").innerHTML = suma;
+		document.getElementById("user_friends").innerHTML = response.summary.total_count;
+		}
+		else {
+		document.getElementById("idcheck").innerHTML = "nene"
+		}
+
+	});
 	
 	}
 
@@ -152,11 +216,18 @@
 
 <h1>cena dat z tvého profilu: <div id="suma">
 </div></h1>
+<h1>Odhadnutá cena: <div id="odhad">
+</div></h1>
 </br>
 <h2>Info co o tobě máme:</h2>
 <h3>ID: <div id="id"></div></h3>
-<h3>Jméno: <div id="name"></div></h3>
-<h3>Gender: <div id="gender"></div></h3>
+<h3>Jmenuješ se: <div id="name"></div></h3>
+<h3>Tvůj gender: <div id="gender"></div></h3>
+<h3>Tvůj e-mail: <div id="e-mail"></div></h3>
+<h3>Je ti minimálně: <div id="age_range"></div></h3>
+<h3>Jsi v časovém pásmu: <div id="timezone"></div></h3>
+<h3>Facebook máš v jazyce: <div id="locale"></div></h3>
+<h3>Máš přátel: <div id="user_friends"></div></h3>
 
 </br><h4>debug:</h4>
 ID_CHECK: <div id="idcheck"> </div>
