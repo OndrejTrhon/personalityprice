@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css?family=Space+Mono');
+
+
+div {
+cursor: url(heart.png), crosshair;
+}
+
+img {
+cursor: url(heart_hover.png), crosshair;
+}
+
+
+* {
+background-color:black;
+}
+
+
+.form{
+font-family: 'Space Mono', monospace;
+font-size:1.5em;
+}
+
+.main{
+font-family: 'Space Mono', monospace;
+font-size:1.5em;
+
+}
+
+input{
+font-size:2em;
+color:white;
+font-family: 'Space Mono', monospace;
+width: 200px;
+display:block;
+  -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+ border-radius: 4px;
+  }
+
+ input[type="button"]{
+background-color: white;
+color:black;
+font-family: 'Space Mono', monospace;
+padding:.75rem 1.5rem;
+margin: .5rem 0 0;
+  outline: 0;
+  border: 0;
+   letter-spacing: .25px;
+     font-weight: 700;
+font-size:2em;
+display:block;
+ border-radius: 4px;
+  }
+  
+.container {
+height:auto;
+margin-top:5em;
+font-family: 'Space Mono', monospace;
+	color:white;
+	text-align:center;
+display: table;
+    width: 100%;
+	}
+
+.title {
+height:auto;
+    text-transform: uppercase;
+font-size:10em;
+font-family:Helvetica, sans-serif;
+text-align:center;
+ color: black;
+  -webkit-text-stroke: 1px white;
+  text-shadow:
+   -1px -1px 0 #FFFFFF,  
+    1px -1px 0 #FFFFFF,
+    -1px 1px 0 #FFFFFF,
+     1px 1px 0 #FFFFFF;
+	 transform : scale(0.75,1.5);
+-webkit-transform:scale(0.75,1.5); /* Safari and Chrome */
+-moz-transform:scale(0.75,1.5); /* Firefox */
+-ms-transform:scale(0.75,1.5); /* IE 9+ */
+-o-transform:scale(0.75,1.5); /* Opera */
+ margin-bottom:0.5em;
+
+}
+	
+.description {
+height:auto;
+font-weight:normal;
+letter-spacing:0pt;
+word-spacing:0pt;
+font-size:1.5em;
+text-align:justify;
+font-family: 'Space Mono', monospace;
+line-height:1.75;
+margin:12px;
+padding:18px;
+}
+
+.count {
+font-size:5em;
+text-align:center;
+}
+
+#odhad, #suma {
+display:inline;
+}
+
+
+#id, #name, #gender, #email, #age_range, #timezone, #locale, #summary {
+color:#d1d1d1;
+font-size:1.11em; 
+}
