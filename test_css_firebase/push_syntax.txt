@@ -1,0 +1,2 @@
+var kunda = firebase.database().ref('/values/').push();
+kunda.set({petr: 4}).then(function(){ console.log("ahoj")})

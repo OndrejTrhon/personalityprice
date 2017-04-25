@@ -1,0 +1,335 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="styl.css" />
+<title>Cena osobnosti</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+
+<body>
+
+
+<script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDj3_evCx2qt6Ef1oVjCnmh7bu9kXYNPMs",
+    authDomain: "cena-osobnosti.firebaseapp.com",
+    databaseURL: "https://cena-osobnosti.firebaseio.com",
+    projectId: "cena-osobnosti",
+    storageBucket: "cena-osobnosti.appspot.com",
+    messagingSenderId: "368423692622"
+  };
+  firebase.initializeApp(config);
+</script>
+<script>
+
+
+
+// a version that tries to make use of Google Sheets API
+// clientid: 773074238379-dv44d1gnr0b7g1uspsjfsc20mtd7onfg.apps.googleusercontent.com
+// client secret: LsNa_kC9QSor16-G8G693UA5
+
+
+
+// ----------------------------------------FB.API part
+
+	
+var odhad = 0;
+var suma = 0;
+
+
+  
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else {
+      // The person is not logged into your app or we are unable to tell.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '150473858807095',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.8' // use graph api version 2.8
+  });
+  
+  
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+  
+  FB.login(
+  function(response) {
+    console.log(response);
+  },
+  {
+    scope: '',
+    auth_type: 'rerequest'
+  }
+);
+
+  };
+  
+ // Calculate is meant for one-level objects like id, which can be fetched via one property from response
+  // Caulcate2 needs to be used for fetching data from multi-level arrayů - like age_range - in this version this is done by two parameter workaround
+  // Calculate3 works when multi-level array data needs to be multiplied for price calculation
+  
+  function calculate (response, field, modify) { 
+			if (response[field] !== "undefined") {
+				suma = suma + modify;
+				
+				document.getElementById(field).innerHTML = response[field];
+				console.log[field];
+				console.log(response)
+		}
+			else {
+				document.getElementById("idcheck").innerHTML = "nene";
+		}
+		}
+		
+		 function calculate2 (response, field1, field2, modify) {
+			if (response[field1] !== "undefined") {
+				suma = suma + modify;
+			
+				document.getElementById(field1).innerHTML = response[field1][field2];
+				console.log(response);
+		}
+			else {
+				document.getElementById("idcheck").innerHTML = "nene";
+		}
+		}
+		
+		 function calculate3 (response, field1, field2, modify) {
+			if (response[field1] !== "undefined") {
+				suma = suma + (modify*(response[field1][field2]));
+	
+				document.getElementById(field1).innerHTML = response[field1][field2];
+				console.log(response);
+		}
+			else {
+				document.getElementById("idcheck").innerHTML = "nene";
+		}
+		}
+		
+		
+		// function that takes value from an estimate form, hides the form and prints out the value to final result div
+	
+	
+	
+function WriteData (id , estimate) {
+  firebase.database().ref().set(
+	estimate: odhad,
+	id : id
+  });
+}
+
+	function count () {
+	odhad = document.getElementById("odhad_form").value;
+	FB.api('/me', {fields: 'id'}, function (response) {
+		WriteData (response.id,odhad);
+	});
+	
+	document.getElementById('odhad_button').style.display = 'none';
+	document.getElementById("odhad").innerHTML = odhad;
+  };
+
+	
+// rounding callback function that is called only upon pressing the final calculation button
+	function printsuma () {
+				suma = suma.toFixed(3); 
+				document.getElementById("suma").innerHTML = suma;
+	}
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+	
+	// the fetching part
+	
+	FB.api('/me', function (response) {
+		calculate(response, "id", 0.012);
+
+	});
+	
+	FB.api('/me', function (response) {
+		calculate(response, "name", 0.012);
+
+	});
+	
+	FB.api('/me', {fields: 'gender'}, function (response) {
+		calculate(response, "gender", 0.12);
+
+	});
+	
+	FB.api('/me', {fields: 'email'}, function (response) {
+		calculate(response, "email", 0.099);
+
+	});
+	
+	FB.api('/me', {fields: 'age_range'}, function (response) {
+		calculate2(response, "age_range", "min", 0.012);
+
+	});
+	
+	FB.api('/me', {fields: 'timezone'}, function (response) {
+		calculate(response, "timezone", 0.006);
+
+	});
+	
+	FB.api('/me', {fields: 'locale'}, function (response) {
+		calculate(response, "locale", 0.006);
+
+	});
+	
+	FB.api('/me/friends', function (response) {
+		calculate3(response, "summary", "total_count", 0.00012);
+
+	});
+	
+	}
+
+	 
+
+	 // beware of HTML elements names! Even with multilevel arrays, only first parametr is taken	 
+
+</script>
+	 
+	 
+<!--
+  Below we include the Login Button social plugin. This button uses
+  the JavaScript SDK to present a graphical Login button that triggers
+  the FB.login() function when clicked.
+-->
+
+<div class="container">
+
+<div class="title">
+Cena osobnosti
+</div>
+
+<div class="description">
+
+Ke klíčovým vlastnostem nových médií patří možnost číselné reprezentace jejich obsahu. Kdysi abstraktní kategorie, jako je barevnost obrazu nebo delikátnost zvuku, se tak při převedení do digitálního prostředí stávají číselnými daty s určitou hodnotou. Pokud využíváme služeb sociálních sítí, obvykle také převádíme část naší osobnosti do kategorií lajků, počtu přátel nebo zveřejněných příspěvků. Sami se tak stáváme prvkem digitálního prostředí.  Uplatňuje se pak princip číselné reprezentace i na nás samotné?
+Náš projekt „blablabla“ ukazuje, že většina z nás má na základě svých aktivit v prostředí internetu konkrétní hodnotu, tak jako i fotky mají svůj počet pixelů. Ve srovnání s nimi však pro vyjádření hodnoty naší osobnosti používáme mnohem atraktivnější proměnnou, a to peníze. Naše osobnost se totiž v prostředí internetu nestává jen pouhým souborem dat, ale také dobře obchodovatelnou komoditou. Kolik myslíte, že stojí právě ta vaše?
+
+</br>
+</br>
+
+<center>Odhadněte svojí cenu (Kč): </center>
+</div>
+<center><div id="odhad_button">
+<form>
+<input type="text" name="odhad_form" id="odhad_form">
+<input type="button" onclick="count()" id="odhad_tlacitko" value="Odeslat">
+</form>
+
+</div></center>
+
+
+
+<div class="main">
+</br>&#8595;
+</br>&#8595;
+</br>&#8595;
+</br>&#8595;
+</br>
+<p>Přihlaste se nám na Facebook, abychom to mohli spočítat:</p>
+<center><fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();" colorscheme="dark" data-size="large" data-auto-logout-link="true">
+</fb:login-button></center>
+
+</br>&#8595;
+</br>&#8595;
+</br>&#8595;
+</br>&#8595;
+</br>
+<center><div id="printsumabutton">
+<form>
+<input type="button" onclick="printsuma()" id="printsuma_button" value="Spocitej mou cenu">
+</form>
+
+</div></center>
+
+<p>cena dat z tvého profilu (v Kč) / odhadnutá cena</br>
+ <div class="count"><div id="suma"></div> / <div id="odhad">
+</div>
+ </div>
+</br>
+</br>
+
+<div class="info">
+Info co o tobě máme:
+Tvoje id: <div id="id"></div>
+Tvoje jmeno: <div id="name"></div>
+Tvůj gender: <div id="gender"></div>
+Tvůj e-mail: <div id="email"></div>
+Je ti minimálně: <div id="age_range"></div>
+Jsi v časovém pásmu: <div id="timezone"></div>
+Facebook máš v jazyce: <div id="locale"></div>
+Máš přátel: <div id="summary"></div>
+</div>
+</br>debug:
+ID_CHECK: <div id="idcheck"> </div>
+STATUS: <div id="status"> </div>
+
+</br>
+</br>
+</br>
+<img src="slahar.png">
+</br>
+</div>
+</div>
+
+</body>
+</html>
