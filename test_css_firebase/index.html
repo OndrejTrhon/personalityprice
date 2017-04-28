@@ -12,6 +12,15 @@
 
 <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
 <script>
+
+//Author of code: Ondřej Trhoň // www.ondrejtrhon.cz
+//Done as a project in class of New Media Studies at Charles University of Prague
+//My biggest thanks goes to Petrroll (look him up on github!), who gave me invaluable advice on coding this
+//This is my first programming project and I started programming because of it, so the code may not be "top-notch"
+//Details on GitHub, open to suggestions
+
+
+
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyDj3_evCx2qt6Ef1oVjCnmh7bu9kXYNPMs",
@@ -156,7 +165,7 @@ var average = 0;
 	
 	//countAverage is called last in the callback chain that starts with SetValue (seee below) and takes an object that represents all values inside our estimation database and prints out average value.
 	// For loop goes through the object, selecting the values in each second-level and adding them to a variable that is then averaged. Note the tonumber step that
-	// is needed because when pulled from database, even "numbers" are represented as strings, a Number(tonumber) is then called to convert then to numeric
+	// is needed because when pulled from datab	ase, even "numbers" are represented as strings, a Number(tonumber) is then called to convert then to numeric
 	
 	function countAverage () {
 		firebase.database().ref('/values/').once('value').then(function (snapshot) {
@@ -176,12 +185,20 @@ var average = 0;
 	//following functions are called inside setValue (see below) and are structured like these because of the asynchronous nature of firebase API calls to ensure that each variable is properly set
 	
 	
+	// they are listed as such in reverse order (they are called from the bottom, startin with SetValue)
+	
+	// WriteData writes the final estimation into the database along with the timestamp in UNIX time for further reference and manipulation
+	
 	function writeData (estimate) {
+			var date = + new Date()
 			firebase.database().ref('values/' + lastValue).set({
 			odhad: estimate,
+			timestamp: date,
 		});
 			countAverage();
 	}
+	
+	//WriteValue sets the position counter modified in the SetValue, it needs to be split like this because of the asynchronicity
 	
 	function writeValue(value) {
 			firebase.database().ref('/pozice/').set({
@@ -189,6 +206,7 @@ var average = 0;
 			});
 			writeData(odhad);
 	}
+	
   
   
   //function that reads/writes/modifies a counter inside firebase database to create unique nodes for reach estimation done by the user and then writes the estimation number to the database for storage and counting 
@@ -202,6 +220,7 @@ var average = 0;
 	}
 	
 
+//this functions takes the value from a form, sets it to the database (details above), hides form and display the estimate value on screen
 
 	function count () {
 	odhad = document.getElementById("odhad_form").value;
@@ -292,13 +311,22 @@ var average = 0;
   the JavaScript SDK to present a graphical Login button that triggers
   the FB.login() function when clicked.
 -->
-
+<div class="navbar">
+<div>
+Fotografie 0.4
+E-mail 1
+Gender 0.6
+</div>
+</div>
 <div class="container">
 
 <div class="title">
 Cena osobnosti
 </div>
 
+
+
+<img src="mark.png"></img>
 <div class="description">
 
 Ke klíčovým vlastnostem nových médií patří možnost číselné reprezentace jejich obsahu. Kdysi abstraktní kategorie, jako je barevnost obrazu nebo delikátnost zvuku, se tak při převedení do digitálního prostředí stávají číselnými daty s určitou hodnotou. Pokud využíváme služeb sociálních sítí, obvykle také převádíme část naší osobnosti do kategorií lajků, počtu přátel nebo zveřejněných příspěvků. Sami se tak stáváme prvkem digitálního prostředí.  Uplatňuje se pak princip číselné reprezentace i na nás samotné?
@@ -306,12 +334,13 @@ Náš projekt „blablabla“ ukazuje, že většina z nás má na základě sv�
 
 </br>
 </br>
-
+</div>
+<div class="odhad_div">
 <center>Odhadněte svojí cenu (Kč): </center>
 </div>
 <center><div id="odhad_button">
 <form>
-<input type="text" name="odhad_form" id="odhad_form">
+<input type="number" name="odhad_form" id="odhad_form">
 <input type="button" onclick="count()" id="odhad_tlacitko" value="Odeslat">
 </form>
 
@@ -367,7 +396,6 @@ STATUS: <div id="status"> </div>
 </br>
 </br>
 </br>
-<img src="slahar.png">
 </br>
 </div>
 </div>
