@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css?family=Space+Mono');
+
+body
+{
+  margin: 0;
+  padding: 0;
+}
+
+
+div {
+font-family:helvetica;
+}
+
+ul {
+	text-align:center;
+    list-style-type: none;
+    overflow: hidden;
+}
+
+li {
+	float:center;
+	 display:inline;
+	background-color: #dddddd;
+	-webkit-border-radius: 71px;-moz-border-radius: 71px;border-radius: 71px;
+	padding-bottom:0.2em;
+	padding-top:0.2em;
+}
+
+li a{
+	display: inline-block;
+    color: grey;
+    padding: 16px;
+    text-decoration: none;
+	font-weight:bold;
+	font-size:0.9em;
+	
+}
+
+.bar {
+	text-align:center;
+	position: relative; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+	right:0;
+    width: 100%; /* Full width */
+margin-bottom:0.5em;
+padding-top:0.5em;
+}
+
+
+.title {
+	text-align:center;
+	font-size:2em;
+	font-weight:bold;
+	border-style:solid none solid none;
+	border-width:2px;
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+
+	
+}
+
+
+
+.links {
+	text-align:center;
+	font-size:1.2em;
+	
+	
+}
+
+
+.main {
+margin-top:3em;
+display:inline-block;
+padding-bottom:2em;
+padding-left:13em;
+padding-right:7em;
+margin-bottom:3em;
+}
+
+.kontejner_main {
+	width:70%;
+	display:inline-block;
+	float:left;
+}
+.titulek {
+	font-size:5.4em;
+	line-height:1.05em;
+	font-weight:bold;
+}
+
+.podtitulek {
+	font-size:1.3em;
+	font-weight:bold;
+	margin-top:1em;
+	margin-bottom:1.5em;
+
+}
+
+.odhad_button {
+	position:relative;
+	  z-index: 1;
+}
+.odhad_form {
+	margin-top:0.1em;
+	margin-right:0.5em;
+	background-color:#dddddd;
+	float:left;
+	width:10em;
+	height:2em;
+	color: #777777;
+	font-size: 1.5em;
+	font-weight:bold;
+	/* css 3 */
+	border-radius:5px;
+	/* mozilla */
+	-moz-border-radius:5px;
+	/* webkit */
+	-webkit-border-radius:5px;
+	border: none;
+}
+
+
+.odhad_tlacitko {
+  position: relative;
+  float:left;
+  padding: 3px 60px;
+  text-align: center;
+	font-weight:bold;
+	font-size:1.1em;
+  line-height: 40px;
+  vertical-align: middle;
+  cursor: pointer;
+  color: #000;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 2px solid #000;
+  background-color: #fff;
+  background-image: none;
+}
+
+.odhad_tlacitko::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  display: block;
+  border: 2px solid #000;
+  background-color: #fff;
+  z-index: -1;
+}
+
+.odhad_tlacitko:hover,
+.odhad_tlacitko:focus {
+  top: 2px;
+  left: 2px;
+}
+
+.odhad_tlacitko:hover::before,
+.odhad_tlacitko:focus::before {
+  top: 0;
+  left: 0;
+}
+
+.obrazek {
+width:30%;
+display:inline-block;
+float:left;
+}
+
+.obrazek img {
+width:60%;
+height:auto;
+}
+
+.faq {
+background-color:#cfffbf;
+padding-bottom:2.6em;
+padding-left:10em;
+padding-right:10em;
+overflow: auto;
+}
+
+.faq h3 {
+	margin-bottom:0.3em;
+	text-align:left;
+	
+	
+}
+
+.title_faq {
+	text-align:center;
+font-size:1.5em;
+font-weight:bold;
+display: block;
+margin-bottom:0.5em;
+padding-top:1em;
+}
+
+.obrazek_faq {
+	display:block;
+margin-left: auto;
+margin-right: auto;
+float: none !important;
+}
+
+.sloupecek1 {
+	margin-top:0.5em;
+	float:left;
+	width: 33%;
+}
+
+.sloupecek2 {
+	margin-top:0.5em;
+	float:left;
+	width: 33%;
+}
+
+.sloupecek3 {
+	margin-top:0.5em;
+	float:left;
+	width: 33%;
+}
+
+.footer1 {
+	font-size:2.5em;
+	font-weight:bold;
+padding-top:1em;
+padding-left:2em;
+padding-right:10em;
+margin-bottom:2em;
+}
+
+.ft1img {
+	margin-top:2em;
+	
+}
+
+.ft1img img {
+	width: 10%;
+    height: auto;
+	margin-right:0.1em;
+	
+	
+}
+
+.footer2 {
+	text-align:center;
+	font-size:1.1em;
+	font-weight:bold;
+	border-style:solid none solid none;
+	border-width:2px;
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+	
+}
+
+.ft2content {
+	margin-right:0.3em;
+	margin-left:0.3em;
+	display:inline;
+	
+}
+
+.footer3 {
+	margin-top:2em;	
+	font-weight:bold;
+	font-size:1.2em;
+}
+
+.ft3content1 {
+	 float:left;
+    padding-left:5em;
+	padding-bottom:1.5em;
+	vertical-align:middle;
+	line-height:3em;
+}
+	
+.ft3content2 {
+	 float:right;
+    padding-right:5em;
+	padding-bottom:1.5em;
+	vertical-align:middle;
+	line-height:3em;
+}

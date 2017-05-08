@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="styl.css" />
+<title>Cena osobnosti</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+
+<script>
+
+function redirect() {
+	window.location.href = "http://www.ondrejtrhon.cz/dox/test_styl/vase_cena.html"
+
+}
+
+
+function save (formular) {
+
+var value = document.getElementById(formular).value;
+sessionStorage.setItem('odhad', value);
+redirect();
+}
+
+</script>
+
+<div class="bar">
+Časové pámo 0.4 Gender 0.6 ololol 0.4 Daniel 1.2
+</div>
+
+<div class="title">
+PERSONALITY PRICE
+</div>
+
+<div class="links">
+<ul>
+<li><a href="oprojektu.html">About</a></li>
+<li><a href="vysledky.html">Results</a></li>
+<li><a href="bbd.html">Big Bang Data</a></li>
+</ul>
+</div>
+
+<div class="main">
+<div class="kontejner_main">
+	<div class="titulek">Have you ever thought about how much does your data cost?</div>
+	<div class="podtitulek">Please enter your value in whole dollars. We will then ask you to login to Facebook to count your price. Switch off blocking popups.</div>
+	<div class="odhad_button">
+		<form>
+			<input type="number" name="odhad_form" class="odhad_form" id="odhad_form">
+			<button type="button" onclick="save('odhad_form');" class="odhad_tlacitko" value="Odeslat">Count</button>
+		</form>
+	</div>
+
+	</div>
+	<div class="obrazek">
+<img src="lol.png">
+	</div>
+	<div class="odhad_button_mobile">
+		<form>
+			<input type="number" name="odhad_form_mobile" class="odhad_form" id="odhad_form_mobile">
+			<button type="button" onclick="save('odhad_form_mobile');" class="odhad_tlacitko" value="Odeslat">Vypočítat</button>
+		</form>
+	</div>
+</div>
+
+
+<div class="faq">
+<div class="title_faq">How does it work?</div>
+<div class="sloupecek1">
+<img src="kruh.png" class="obrazek_faq">
+<h3>1. Estimation</h3>	
+<div class="sloupecek_text">We will ask you to estimate your personal worth. Then, we will ask you to login to our website using Facebook.
+</div>
+</div>
+<div class="sloupecek2">
+<img src="kruh.png" class="obrazek_faq">	
+<h3>2. Calculation</h3>	
+<div class="sloupecek_text">Through Facebook, we read the data stored on your profile - just reading, no saving. We assing each piece of data a price according to our methodology (see About). The only data we save is your total price and total estimation, anonymously.
+</div>
+</div>
+<div class="sloupecek3">
+<img src="kruh.png" class="obrazek_faq">
+<h3>3. Results</h3>	
+<div class="sloupecek_text">We print the total price (sum of prices of data pieces) together with your estimation and averages for all users of our app. The averages are the reason we save your prices. But, again, we cannot identify you in any way.
+</div>
+</div>
+</div>
+
+
+<div class="footer1">
+
+<div class="ft1content">This project is a part of Big Bang Data exhibition in DOX gallery in Prague.</div>
+<div class="ft1img">
+<img src="snm.png">
+<img src="dox.png">
+</div>
+</div>
+
+<div class="footer2">
+<div class="ft2content">Bára Hyclová</div>
+<div class="ft2content">Ondřej Trhoň</div>
+<div class="ft2content">Daniel Šlahař</div>
+</div>
+
+
+<div class="footer3">
+<div class="ft3content1">&copy; 2017</div>
+<div class="ft3content2"><img src="money.png"><img src="money.png"><img src="money.png"></div>
+</div>
+
+
+</body>
+</html>
