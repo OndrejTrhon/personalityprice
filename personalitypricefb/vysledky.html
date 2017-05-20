@@ -1,0 +1,181 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="styl_vysledky.css" />
+<link href="https://fonts.googleapis.com/css?family=Syncopate:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i" rel="stylesheet">
+<title>Cena osobnosti</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body onload="Display()">
+
+
+<script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
+<script>
+
+//Author of code: Ondřej Trhoň // www.ondrejtrhon.cz
+//Done as a project in class of New Media Studies at Charles University of Prague
+//My biggest thanks goes to Petrroll (look him up on github!), who gave me invaluable advice on coding this
+//This is my first programming project and I started programming because of it, so the code may not be "top-notch"
+//Details on GitHub, open to suggestions
+
+
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDj3_evCx2qt6Ef1oVjCnmh7bu9kXYNPMs",
+    authDomain: "cena-osobnosti.firebaseapp.com",
+    databaseURL: "https://cena-osobnosti.firebaseio.com",
+    projectId: "cena-osobnosti",
+    storageBucket: "cena-osobnosti.appspot.com",
+    messagingSenderId: "368423692622"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+
+
+var lastValue = 0;
+var list = 0;
+var average = 0;
+var average_suma = 0;
+
+  
+	//countAverage is called last in the callback chain that starts with SetValue (seee below) and takes an object that represents all values inside our estimation database and prints out average value.
+	// For loop goes through the object, selecting the values in each second-level and adding them to a variable that is then averaged. Note the tonumber step that
+	// is needed because when pulled from datab	ase, even "numbers" are represented as strings, a Number(tonumber) is then called to convert then to numeric
+	
+	
+	function countAverageOdhad () {
+		firebase.database().ref('/values/').once('value').then(function (snapshot) {
+		console.log(snapshot.val());
+		list = snapshot.val();
+		for(var a in list) { 
+			console.log(list[a]["odhad"]);
+			var tonumber = list[a]["odhad"];
+			average = average + Number(tonumber);
+			}
+		document.getElementById('celkovyodhad').innerHTML = average;
+		average = average / list.length;
+		console.log(average);
+		document.getElementById("prumer_odhad").innerHTML = average;
+		})
+		}
+		
+		
+		function countAverageSuma () {
+		firebase.database().ref('/values/').once('value').then(function (snapshot) {
+		console.log(snapshot.val());
+		list = snapshot.val();
+		for(var a in list) { 
+			console.log(list[a]["suma"]);
+			var tonumber = list[a]["suma"];
+			average_suma = average_suma + Number(tonumber);
+			}
+		document.getElementById('celkovacena').innerHTML = average_suma;
+		average_suma = average_suma / list.length
+		console.log(average_suma);
+		document.getElementById("prumer_suma").innerHTML = average_suma;
+		})
+		}
+
+		
+		
+	function Display () {
+		return firebase.database().ref('/pozice/').once('value').then(function(snapshot) {
+		lastValue = snapshot.val().pozice;
+		document.getElementById('pocet').innerHTML = lastValue;
+		countAverageOdhad();
+		countAverageSuma();
+		})
+	}
+	
+	function showDiv () {
+		document.getElementById('kont0').style.visibility = "visible";
+		document.getElementById('kont1').style.visibility = "visible";
+		document.getElementById('kont2').style.visibility = "visible";
+		document.getElementById('kont3').style.visibility = "visible";
+		document.getElementById('kont4').style.visibility = "visible";
+		document.getElementById('odhalit_button').style.display = "none";
+		
+	}
+		 
+
+
+</script>
+<div class="bar">
+Časové pámo 0.4 Gender 0.6 ololol 0.4 Daniel 1.2
+</div>
+
+<div class="title">
+PERSONALITY PRICE
+</div>
+
+<div class="links">
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="oprojektu.html">About</a></li>
+<li><a href="vysledky.html">Results</a></li>
+<li><a href="bbd.html">Big Bang Data</a></li>
+</ul>
+</div>
+
+<div class="main">
+<div class="kontejner_main">
+		<div class="titulek">Results</div>
+<button name="answer" id="odhalit_button" class="odhalit" value="Really show?" onclick="showDiv()">Really show?</button>		
+<div class="podtitulek" id="kont0" style="visibility:hidden;"><div id="pocet"></div> people calculated their price. The sum of their worth is <div id="celkovacena"></div>. Did you try to calculate your own?</div>
+		
+		<div id="kont1" style="visibility:hidden;" class="kontejner_stred">
+			<div class="kont_titulek">Total of estimates:</div>
+			<div id="celkovyodhad"></div>
+				</div>
+	
+		<div id ="kont2" style="visibility:hidden;"class="kontejner_left">
+			<div class="kont_titulek">Average of estimates:</div>
+			<div id="prumer_odhad"></div>
+				</div>
+		<div id ="kont3" style="visibility:hidden;"class="kontejner_right">
+			<div class="kont_titulek">Average price of profile:</div>
+			<div id="prumer_suma"></div>
+				</div>
+	<button id="kont4" style="visibility:hidden;" onclick="location.href='index.html';" value="Odeslat">Calculate my own price!</button>
+</div>
+</div>
+
+<div class="hr"></div>
+<div class="faq">
+<div class="title_faq">What's the point?</div>
+<div class="sloupecek1">	
+One of the key properties of new media is numerical representation. When transferred into the digital realm, formerly abstract categories like paint saturation or sound delicacy become data with concrete values. If we use social media networks, it is a part of our personality that undergoes similar transformation - into categories of likes, "friendships" or published posts. We ourselves become a part of digital environment. Hence, does principle of numerical representation include even us?</div>
+<div class="sloupecek2">
+Our project shows, that most of us have, based on our online activities, a particular price, just like digital photos have exact number of pixels. But instead of them, to express the value of our personality, we use by far more attractive variable - money. That is because on internet, you are not only a data file, but a commodity as well. And a very sought-after one. How much do you think you cost?
+</div>
+</div>
+
+
+<div class="footer1">
+
+<div class="ft1content">This project is a part of Big Bang Data exhibition at DOX Centre for Contemporary Art in Prague.</div>
+<div class="ft1img">
+<img src="snm.png">
+<img src="dox.png">
+</div>
+</div>
+
+<div class="footer2">
+<div class="ft2content">Bára Hyclová</div>
+<div class="ft2content">Ondřej Trhoň</div>
+<div class="ft2content">Daniel Šlahař</div>
+</div>
+
+
+<div class="footer3">
+<div class="ft3content1">&copy; 2017</div>
+<div class="ft3content2"><img src="money.png"><img src="money.png"><img src="money.png"></div>
+</div>
+
+
+</body>
+</html>

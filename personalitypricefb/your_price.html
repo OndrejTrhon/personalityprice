@@ -1,0 +1,524 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="styl_vasecena.css" />
+<link href="https://fonts.googleapis.com/css?family=Syncopate:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i" rel="stylesheet">
+<title>Cena osobnosti</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+
+<script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
+<script>
+
+//Author of code: Ondřej Trhoň // www.ondrejtrhon.cz
+//Done as a project in class of New Media Studies at Charles University of Prague
+//My biggest thanks goes to Petrroll (look him up on github!), who gave me invaluable advice on coding this
+//This is my first programming project and I started programming because of it, so the code may not be "top-notch"
+//Details on GitHub, open to suggestions
+
+
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDj3_evCx2qt6Ef1oVjCnmh7bu9kXYNPMs",
+    authDomain: "cena-osobnosti.firebaseapp.com",
+    databaseURL: "https://cena-osobnosti.firebaseio.com",
+    projectId: "cena-osobnosti",
+    storageBucket: "cena-osobnosti.appspot.com",
+    messagingSenderId: "368423692622"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+
+
+
+// a version that tries to make use of Google Sheets API
+// clientid: 773074238379-dv44d1gnr0b7g1uspsjfsc20mtd7onfg.apps.googleusercontent.com
+// client secret: LsNa_kC9QSor16-G8G693UA5
+
+
+
+// ----------------------------------------FB.API part
+
+	
+var odhad = localStorage.getItem('odhad');
+odhad = odhad.replace(/"/g,"");
+var suma = 0;
+var lastValue = 0;
+var list = 0;
+var average = 0;
+var average_suma = 0;
+var countcheck = 0;
+
+  
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else {
+      // The person is not logged into your app or we are unable to tell.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    }
+  }
+  
+  function logout () {
+	FB.logout(function(response) {
+	document.getElementById('odhlaseno').style.visibility = "visible";
+	document.getElementById('odhlasit').style.display = "none";
+	document.getElementById('odhlasit_button').style.display = "none";
+  // user is now logged out
+	});
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '150473858807095',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.8' // use graph api version 2.8
+  });
+  
+  
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+  
+
+  };
+  
+ // Calculate is meant for one-level objects like id, which can be fetched via one property from response
+  // Caulcate2 needs to be used for fetching data from multi-level arrayů - like age_range - in this version this is done by two parameter workaround
+  // Calculate3 works when multi-level array data needs to be multiplied for price calculation
+ 
+function checkcount () {
+			if (countcheck < 8) {
+					// console.log(countcheck);
+				
+				}
+				else {
+					count();
+					printsuma();
+				}	
+} 
+				
+  function calculate (response, field, modify) { 
+			if (response[field] !== "undefined") {
+				suma = suma + modify;
+				countcheck = countcheck + 1;
+				
+				
+				// console.log[field];
+				// console.log(response);
+				checkcount();
+				document.getElementById(field).innerHTML = response[field];
+		}
+			else {
+				console.log("nic" + field);
+		}
+		};
+		
+	function calculate2 (response, field1, field2, modify) {	
+		 if (response[field1] !== "undefined") {
+				suma = suma + modify;
+				countcheck = countcheck + 1;
+			
+				
+				console.log(response);
+				checkcount ();
+				document.getElementById(field1).innerHTML = response[field1][field2];
+		}
+			else {
+			//	document.getElementById("idcheck").innerHTML = "nene";
+		}
+		};
+		
+		 function calculate3 (response, field1, field2, modify) {
+			if (response[field1] !== "undefined") {
+				suma = suma + (modify*(response[field1][field2]));
+					countcheck = countcheck + 1;
+	
+				// console.log(response);
+				checkcount ();
+			}
+			else {
+				console.log("nic" + field1);
+		}
+		}
+		
+		
+		// function that takes value from an estimate form, hides the form and prints out the value to final result div
+	
+	//countAverage is called last in the callback chain that starts  	with SetValue (seee below) and takes an object that represents all values inside our estimation database and prints out average value.
+	// For loop goes through the object, selecting the values in each second-level and adding them to a variable that is then averaged. Note the tonumber step that
+	// is needed because when pulled from datab	ase, even "numbers" are represented as strings, a Number(tonumber) is then called to convert then to numeric
+	
+	function countAverageOdhad () {
+		firebase.database().ref('/values/').once('value').then(function (snapshot) {
+		//console.log(snapshot.val());
+		list = snapshot.val();
+		for(var a in list) { 
+			// console.log(list[a]["odhad"]);
+			var tonumber = list[a]["odhad"];
+			average = average + Number(tonumber);
+			}
+		average = average / list.length
+		console.log(average);
+		average_fixed = average.toFixed(3);
+		document.getElementById("prumer_odhad").innerHTML = average_fixed;
+		})
+		}
+		
+		
+		function countAverageSuma () {
+		firebase.database().ref('/values/').once('value').then(function (snapshot) {
+		//console.log(snapshot.val());
+		list = snapshot.val();
+		for(var a in list) { 
+			//console.log(list[a]["suma"]);
+			var tonumber = list[a]["suma"];
+			average_suma = average_suma + Number(tonumber);
+			}
+		average_suma = average_suma / list.length
+		console.log(average_suma);
+		average_sum = average_suma.toFixed(3);
+		document.getElementById("prumer_suma").innerHTML = average_sum;
+		document.getElementById('loading').style.display = "none";
+		})
+		}
+	
+	//following functions are called inside setValue (see below) and are structured like these because of the asynchronous nature of firebase API calls to ensure that each variable is properly set
+	
+	
+	// they are listed as such in reverse order (they are called from the bottom, startin with SetValue)
+	
+	// WriteData writes the final estimation into the database along with the timestamp in UNIX time for further reference and manipulation
+	
+	function writeData (estimate, sum) {
+			var date = + new Date()
+			firebase.database().ref('values/' + lastValue).set({
+			odhad: estimate,
+			suma: sum,
+			timestamp: date,
+		});
+			countAverageOdhad();	
+			countAverageSuma();
+	}
+	
+	//WriteValue sets the position counter modified in the SetValue, it needs to be split like this because of the asynchronicity
+	
+	function writeValue(value) {
+			firebase.database().ref('/pozice/').set({
+			pozice: value,
+			});
+			writeData(odhad, suma);
+	}
+	
+  
+  
+  //function that reads/writes/modifies a counter inside firebase database to create unique nodes for reach estimation done by the user and then writes the estimation number to the database for storage and counting 
+	
+	function setValue () {
+		return firebase.database().ref('/pozice/').once('value').then(function(snapshot) {
+		lastValue = snapshot.val().pozice;
+		lastValue = lastValue + 1;
+		writeValue (lastValue);
+		})
+	}
+	
+
+//this functions takes the value from a form, sets it to the database (details above), hides form and display the estimate value on screen
+
+	function count () {
+	setValue ();
+	document.getElementById("odhad").innerHTML = odhad;
+  };
+
+	
+// rounding callback function that is called only upon pressing the final calculation button
+	function printsuma () {
+				sum = suma.toFixed(3);
+				 document.getElementById("suma").innerHTML = sum;
+	}
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+     // document.getElementById('status').innerHTML =
+        //'Thanks for logging in, ' + response.name + '!';
+    });
+
+	
+	// the fetching part
+	
+	FB.api('/me', function (response) {
+		calculate(response, "id", 0.005);
+
+	});
+	
+	FB.api('/me', function (response) {
+		calculate(response, "name", 0.005);
+
+	});
+	
+	
+	FB.api('/me', {fields: 'gender'}, function (response) {
+		calculate(response, "gender", 0.0005);
+
+	});
+	
+	FB.api('/me', {fields: 'email'}, function (response) {
+		calculate(response, "email", 0.007);
+
+	});
+	
+	FB.api('/me', {fields: 'age_range'}, function (response) {
+		calculate2(response, "age_range", "min", 0.024);
+
+	});
+	
+	FB.api('/me', {fields: 'timezone'}, function (response) {
+		calculate(response, "timezone", 0.0005);
+
+	});
+	
+	FB.api('/me', {fields: 'locale'}, function (response) {
+		calculate(response, "locale", 0.0005);
+
+	});
+	
+	FB.api('/me/friends', function (response) {
+		calculate3(response, "summary", "total_count", 0.0008);
+		document.getElementById("friends").innerHTML = response["summary"]["total_count"];
+	});
+	
+	FB.api('/me/likes?summary=true', function (response) {
+		calculate3(response, "summary", "total_count", 0.001);
+		document.getElementById("likes").innerHTML = response["summary"]["total_count"];
+		
+	});
+	
+	FB.api('/me', {fields: 'birthday'}, function (response) {
+		calculate(response, "birthday", 0.046);
+
+	});
+	
+	FB.api('/me', {fields: 'location'}, function (response) {
+		calculate2(response, "location", "name", 0.0004);
+
+	});
+	
+	FB.api('/me', {fields: 'hometown'}, function (response) {
+		calculate2(response, "hometown", "name", 0.0004);
+
+	});
+	
+	FB.api('/me', {fields: 'education'}, function (response) {
+		calculate(response, "education", 0.001);
+		document.getElementById("educationhistory").innerHTML = response.education.length;
+		document.getElementById('education').style.visibility = "hidden";
+	});
+	
+	FB.api('/me', {fields: 'work'}, function (response) {
+		calculate(response, "work", 0.07);
+	document.getElementById("workhistory").innerHTML = response.work.length;
+	document.getElementById('work').style.visibility = "hidden";
+	});
+	
+	FB.api('/me', {fields: 'website'}, function (response) {
+		calculate(response, "website", 0.005);
+
+	});
+	
+	FB.api('/me', {fields: 'relationship_status'}, function (response) {
+		calculate(response, "relationship_status", 0.01);
+
+	});
+	
+	
+	
+	}
+	 
+
+	 // beware of HTML elements names! Even with multilevel arrays, only first parametr is taken	 
+
+</script>
+	 
+
+
+
+
+
+
+
+
+
+<div class="bar">
+Časové pámo 0.4 Gender 0.6 ololol 0.4 Daniel 1.2
+</div>
+
+<div class="title">
+PERSONALITY PRICE
+</div>
+
+<div class="links">
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="oprojektu.html">About</a></li>
+<li><a href="vysledky.html">Results</a></li>
+<li><a href="bbd.html">Big Bang Data</a></li>
+</ul>
+</div>
+
+<div class="main">
+<div class="kontejner_main">
+		<div class="titulek">Price of your personality</div>
+		<div class="podtitulek">If we wanted to sell <div id="name"></div>, he/she/they would cost this much:</div>
+		<div class="kontejner_left">
+			<div class="kont_titulek">Your estimate:</div>
+			<div id="odhad"></div>
+				</div>
+		<div class="kontejner_right">
+			<div class="kont_titulek">Your price:</div>
+			<div id="suma"></div>
+				</div>
+	
+		<div class="podtitulek">What about others?</div>
+		<div class="kontejner_left">
+			<div class="kont_titulek">Average of estimates</div>
+			<div id="prumer_odhad"></div>
+				</div>
+		<div class="kontejner_right">
+			<div class="kont_titulek">Average of prices</div>
+			<div id="prumer_suma"></div>
+				</div>
+			<div class="overview">
+			<div class="podtitulek">We calculated your price from this pieces of your personality:</div>
+			<div class="overview_block">Facebook ID: <div id="id"></div></div>
+			<div class="overview_block">Gender: <div id="gender"></div></div>
+			<div class="overview_block">E-mail: <div id="email"></div></div>
+			<div class="overview_block">Under or over 21: <div id="age_range"></div></div>
+			<div class="overview_block">Timezone: <div id="timezone"></div></div>
+			<div class="overview_block">Locale: <div id="locale"></div></div>
+			<div class="overview_block">Number of friends: <div id="friends"></div></div>
+			<div class="overview_block">Number of page likes: <div id="likes"></div></div>
+			<div class="overview_block">Birthday: <div id="birthday"></div></div>
+			<div class="overview_block">Location: <div id="location"></div></div>
+			<div class="overview_block">Hometown: <div id="hometown"></div></div>
+			<div class="overview_block">Education*: <div id="educationhistory"></div></div>
+			<div class="overview_block">Work*: <div id="workhistory"></div></div>
+			<div class="overview_block">Website: <div id="website"></div></div>
+			<div class="overview_block">Relationship status: <div id="relationship_status"></div></div>
+			<div id="work" ></div>
+			<div id="education"></div>
+			<div class="footnote"> *) shows number of entries in your profile</div>
+			
+			</div>
+			<div class="aboutlink">
+<button id="metodologie" onclick="location.href='oprojektu.html';" value="Odeslat">Detailed methodology</button>
+</div>
+		
+		<div class="odhlasit_titulek" id="odhlasit">We don't save your Facebook information. But if you're worried, you can always logout.</div>	
+		<button id="odhlasit_button" onclick="logout();" value="Odeslat">Logout from Facebook</button>
+		<div class="odhlaseno_titulek" id="odhlaseno" style="visibility:hidden;">Logout completed.</div>	
+	
+</div>
+</div>
+
+<div class="hr"></div>
+<div class="faq">
+<div class="title_faq">What's the point?</div>
+<div class="sloupeckykont">
+<div class="sloupecek1">	
+<div class="sloupecek_text">One of the key properties of new media is numerical representation. When transferred into the digital realm, formerly abstract categories like paint saturation or sound delicacy become data with concrete values. If we use social media networks, it is a part of our personality that undergoes similar transformation - into categories of likes, "friendships" or published posts. We ourselves become a part of digital environment. Hence, does principle of numerical representation include even us?
+</div>
+
+</div>
+<div class="sloupecek2">
+<div class="sloupecek_text">
+Our project shows, that most of us have, based on our online activities, a particular price, just like digital photos have exact number of pixels. But instead of them, to express the value of our personality, we use by far more attractive variable - money. That is because on internet, you are not only a data file, but a commodity as well. And a very sought-after one.
+</div>
+</div>
+
+</div>
+</div>
+
+
+<div class="footer1">
+
+<div class="ft1content">This project is a part of Big Bang Data exhibition at DOX Centre for Contemporary Art in Prague.</div>
+<div class="ft1img">
+<img src="snm.png">
+<img src="dox.png">
+</div>
+</div>
+
+<div class="footer2">
+<div class="ft2content">Bára Hyclová</div>
+<div class="ft2content">Ondřej Trhoň</div>
+<div class="ft2content">Daniel Šlahař</div>
+</div>
+
+
+<div class="footer3">
+<div class="ft3content1">&copy; 2017</div>
+<div class="ft3content2"><img src="money.png"><img src="money.png"><img src="money.png"></div>
+</div>
+
+<div class="overlay" id="loading">
+<div class="saving">
+<div class="saving_anim">Click the Facebook Login button (you may need to allow pop-ups) and we will count your price<span>.</span><span>.</span><span>.</span></div>
+
+<div class="fb-login-button" data-max-rows="1" data-size="large" scope="public_profile,email,user_friends,user_birthday,user_relationships,user_education_history,user_hometown,user_location,user_work_history,user_likes,user_website" onlogin="checkLoginState();" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false">
+</div>
+</div>
+</div>
+</body>
+</html>
